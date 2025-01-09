@@ -42,11 +42,11 @@ class User(Base):
             password.encode("utf-8"), self.hashed_password.encode("utf-8")
         )
 
-    async def generate_token(self, expires_in: int = 4800) -> str:
+    async def generate_token(self, token_lifetime: int = conf.token_lifetime) -> str:
         payload = {
             "user_id": self.id,
             "exp": datetime.now(pytz.timezone("Europe/Moscow"))
-            + timedelta(seconds=expires_in),
+            + timedelta(seconds=token_lifetime),
         }
         return jwt.encode(payload, conf.secret_key, algorithm="HS256")
 

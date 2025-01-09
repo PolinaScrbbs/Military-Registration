@@ -11,6 +11,7 @@ os.environ.pop("USER", None)
 os.environ.pop("PASSWORD", None)
 
 os.environ.pop("SECRET_KEY", None)
+os.environ.pop("TOKEN_LIFETIME", None)
 
 
 class Config:
@@ -26,6 +27,8 @@ class Config:
         self.db_name = os.getenv("DBNAME")
 
         self.secret_key = os.getenv("SECRET_KEY")
+        self.token_lifetime = int(os.getenv("TOKEN_LIFETIME"))
+
         self.database_url = f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.db_name}"
 
 

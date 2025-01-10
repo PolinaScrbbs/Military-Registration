@@ -1,38 +1,29 @@
 from pathlib import Path
-from fastapi import HTTPException, status, UploadFile
+from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config import config as conf
-from .models import Content
+from .models import Content, ContentCategory
 from .schemes import NewContent
-
-
-async def file_type_checker(file) -> None:
-    ALLOWED_MIME_TYPES = {
-        "txt": "text/plain",
-        "word": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "excel": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "png": "image/png",
-        "jpeg": "image/jpeg",
-        "powerpoint": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    }
-
-    if file.content_type not in ALLOWED_MIME_TYPES.values():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid file type: {file.content_type}. "
-            f"Valid types: {', '.join(ALLOWED_MIME_TYPES.keys())}",
-        )
+from .validator import CreateContentValidator
 
 
 async def upload_content(
-    file: UploadFile, user_folder: str, category: str, filename: str
+    session: AsyncSession, file: UploadFile, user_folder: str, category: ContentCategory, filename: str
 ) -> str:
+    original_extension = Path(file.filename).suffix
+    validator = CreateContentValidator(
+        filename=filename,
+        category=category,
+        extension=original_extension[1:],
+        session=session
+    )
+    await validator.validate()
+
     media_root = Path(conf.media_root)
-    save_path = media_root / category / user_folder
+    save_path = media_root / category.value / user_folder
     save_path.mkdir(parents=True, exist_ok=True)
 
-    original_extension = Path(file.filename).suffix
     file_path = save_path / f"{filename}{original_extension}"
 
     with open(file_path, "wb") as f:
@@ -48,9 +39,10 @@ async def create_content(
     new_content: NewContent,
 ) -> Content:
     path = await upload_content(
+        session,
         new_content.file,
         current_user_username,
-        new_content.category.value,
+        new_content.category,
         new_content.filename,
     )
 

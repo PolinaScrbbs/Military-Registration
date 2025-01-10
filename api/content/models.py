@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean, Enum, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from ..user.models import Base, BaseEnum
@@ -18,7 +18,7 @@ class Content(Base):
     __tablename__ = "contents"
 
     id = Column(Integer, primary_key=True)
-    filename = Column(String(256), nullable=False, unique=True)
+    filename = Column(String(256), nullable=False)
     path = Column(String(256), nullable=False, unique=True)
     creator_id = Column(Integer, ForeignKey("users.id"))
     category = Column(Enum(ContentCategory), nullable=False)
@@ -27,6 +27,10 @@ class Content(Base):
     last_updated_at = Column(DateTime, default=None)
 
     creator = relationship("User", back_populates="contents")
+
+    __table_args__ = (
+        UniqueConstraint('filename', 'category', name='_filename_category_uc'),
+    )
 
     async def archive(self):
         self.is_archived = True

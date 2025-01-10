@@ -4,11 +4,19 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .models import Commissariat
 from .schemes import NewCommissariat
+from .validator import CreateCommissariatValidator
 
 
 async def create_commissariat(
     session: AsyncSession, new_commissariat=NewCommissariat
 ) -> Commissariat:
+    await CreateCommissariatValidator(
+        new_commissariat.name,
+        new_commissariat.address,
+        new_commissariat.commissioner_id,
+        session,
+    ).validate()
+
     commissariat = Commissariat(
         name=new_commissariat.name,
         address=new_commissariat.address,

@@ -6,7 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 from config import config as conf
-from api.user.models import Base as user_base
+from api.content.models import Base
 
 alembic_config = context.config
 section = alembic_config.config_ini_section
@@ -17,7 +17,7 @@ alembic_config.set_section_option(section, "DATABASE_URL", conf.database_url)
 if alembic_config.config_file_name is not None:
     fileConfig(alembic_config.config_file_name)
 
-target_metadata = user_base.metadata
+target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:

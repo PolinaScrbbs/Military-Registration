@@ -1,12 +1,10 @@
 from typing import Tuple
 
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..database import get_session
-from ..user.queries import get_user_by_username, get_user_by_id
+from ..user.queries import get_user_by_username
 from ..user.models import User, Token
 from ..user.schemes import UserCreate, BaseUser
 

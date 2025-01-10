@@ -5,6 +5,7 @@ import bcrypt
 import pytz
 from datetime import datetime, timedelta
 from sqlalchemy import Column, ForeignKey, Integer, String, Enum
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 
@@ -32,6 +33,8 @@ class User(Base):
     full_name = Column(String(50), nullable=False)
     role = Column(Enum(Role), default=Role.USER, nullable=False)
 
+    contents = relationship("Content", back_populates="creator")
+
     async def set_password(self, password: str) -> None:
         self.hashed_password = bcrypt.hashpw(
             password.encode("utf-8"), bcrypt.gensalt()
@@ -49,6 +52,14 @@ class User(Base):
             + timedelta(seconds=token_lifetime),
         }
         return jwt.encode(payload, conf.secret_key, algorithm="HS256")
+
+    async def to_base_user(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "full_name": self.full_name,
+            "role": self.role,
+        }
 
 
 class Token(Base):

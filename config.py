@@ -13,6 +13,8 @@ os.environ.pop("PASSWORD", None)
 os.environ.pop("SECRET_KEY", None)
 os.environ.pop("TOKEN_LIFETIME", None)
 
+os.environ.pop("MEDIA_ROOT", None)
+
 
 class Config:
     def __init__(self):
@@ -29,8 +31,9 @@ class Config:
         self.secret_key = os.getenv("SECRET_KEY")
         self.token_lifetime = int(os.getenv("TOKEN_LIFETIME"))
 
+        self.media_root = os.getenv("MEDIA_ROOT")
+
         self.database_url = f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.db_name}"
 
 
 config = Config()
-print(config.database_url)

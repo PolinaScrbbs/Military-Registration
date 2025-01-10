@@ -33,6 +33,14 @@ async def get_contents(
     filters: GetContentFilters = Depends(),
     session: AsyncSession = Depends(get_session),
 ):
-    Depends(get_current_user)
     contents = await qr.get_contents(session, filters)
     return contents
+
+
+@router.get("/{content_id}", response_model=ContentResponse)
+async def get_content(
+    content_id: int,
+    session: AsyncSession = Depends(get_session),
+):
+    content = await qr.get_content(session, content_id)
+    return await content.to_pydantic()

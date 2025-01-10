@@ -102,3 +102,20 @@ async def get_contents(
 
     contents = [await content.to_pydantic() for content in contents]
     return contents
+
+
+async def get_content(session: AsyncSession, content_id: int) -> Content:
+    query = (
+        select(Content)
+        .where(Content.id == content_id)
+        .options(selectinload(Content.creator))
+    )
+    result = await session.execute(query)
+    content = result.scalar()
+
+    if not content:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Content not found"
+        )
+
+    return content

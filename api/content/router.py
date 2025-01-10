@@ -1,5 +1,5 @@
-from fastapi import Depends, APIRouter, status
-from fastapi.responses import JSONResponse
+from typing import List
+from fastapi import Depends, APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..database import get_session
@@ -7,7 +7,7 @@ from ..auth.middleware import get_current_user
 from ..user.middleware import role_checker
 from ..user.models import User, Role
 
-from .schemes import NewContent, ContentResponse
+from .schemes import NewContent, ContentResponse, GetContentFilters
 from . import queries as qr
 
 
@@ -26,3 +26,13 @@ async def upload_content(
         session, current_user.id, current_user.username, new_content
     )
     return await new_content.to_pydantic()
+
+
+@router.get("s/", response_model=List[ContentResponse])
+async def get_contents(
+    filters: GetContentFilters = Depends(),
+    session: AsyncSession = Depends(get_session),
+):
+    Depends(get_current_user)
+    contents = await qr.get_contents(session, filters)
+    return contents

@@ -1,6 +1,15 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean, Enum, UniqueConstraint
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    ForeignKey,
+    DateTime,
+    Boolean,
+    Enum,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import relationship
 
 from ..user.models import Base, BaseEnum
@@ -29,7 +38,7 @@ class Content(Base):
     creator = relationship("User", back_populates="contents")
 
     __table_args__ = (
-        UniqueConstraint('filename', 'category', name='_filename_category_uc'),
+        UniqueConstraint("filename", "category", name="_filename_category_uc"),
     )
 
     async def archive(self):

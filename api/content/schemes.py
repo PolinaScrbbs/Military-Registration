@@ -19,3 +19,8 @@ class ContentResponse(ID):
     is_archived: bool
     created_at: str
     last_updated_at: Optional[str]
+
+
+class GetContentFilters(BaseModel):
+    category: Optional[ContentCategory] = None
+    creator: Optional[str] = None

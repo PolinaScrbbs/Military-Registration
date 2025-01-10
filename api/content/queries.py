@@ -1,22 +1,33 @@
 from pathlib import Path
-from fastapi import UploadFile
+from typing import List
+
+from fastapi import UploadFile, HTTPException, status
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
+from sqlalchemy.sql import and_
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from ..user.validator import user_exists_by_username
 
 from config import config as conf
 from .models import Content, ContentCategory
-from .schemes import NewContent
+from .schemes import NewContent, ContentResponse, GetContentFilters
 from .validator import CreateContentValidator
 
 
 async def upload_content(
-    session: AsyncSession, file: UploadFile, user_folder: str, category: ContentCategory, filename: str
+    session: AsyncSession,
+    file: UploadFile,
+    user_folder: str,
+    category: ContentCategory,
+    filename: str,
 ) -> str:
     original_extension = Path(file.filename).suffix
     validator = CreateContentValidator(
         filename=filename,
         category=category,
         extension=original_extension[1:],
-        session=session
+        session=session,
     )
     await validator.validate()
 
@@ -58,3 +69,36 @@ async def create_content(
     await session.refresh(content)
 
     return content
+
+
+async def get_contents(
+    session: AsyncSession, filters: GetContentFilters
+) -> List[ContentResponse]:
+    query = select(Content).options(selectinload(Content.creator))
+
+    conditions = []
+    if filters.category:
+        if filters.category not in ContentCategory:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"Invalid category: {filters.category}",
+            )
+        conditions.append(Content.category == filters.category)
+    if filters.creator:
+        await user_exists_by_username(session, filters.creator)
+        conditions.append(Content.creator.has(username=filters.creator))
+
+    if conditions:
+        query = query.where(and_(*conditions))
+
+    result = await session.execute(query)
+
+    contents = result.scalars().all()
+
+    if not contents:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="No content found"
+        )
+
+    contents = [await content.to_pydantic() for content in contents]
+    return contents

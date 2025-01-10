@@ -1,10 +1,11 @@
 import re
 from fastapi import HTTPException, status
-from  sqlalchemy import text
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..auth.validator import ValidateError
 from .models import ContentCategory
+
 
 class CreateContentValidator:
     def __init__(
@@ -12,7 +13,7 @@ class CreateContentValidator:
         filename: str,
         category: ContentCategory,
         extension: str,
-        session: AsyncSession
+        session: AsyncSession,
     ) -> None:
         self.filename = filename
         self.category = category
@@ -43,16 +44,17 @@ class CreateContentValidator:
                 status.HTTP_422_UNPROCESSABLE_ENTITY,
             )
 
-
         result = await self.session.execute(
-            text(f"SELECT 1 FROM contents WHERE filename = :filename AND category = :category"),
-            {"filename": self.filename, "category": self.category.name}
+            text(
+                f"SELECT 1 FROM contents WHERE filename = :filename AND category = :category"
+            ),
+            {"filename": self.filename, "category": self.category.name},
         )
 
         if result.fetchone():
             raise ValidateError(
                 "Content with this filename already exists in the selected category. Please choose a different name.",
-                status.HTTP_409_CONFLICT
+                status.HTTP_409_CONFLICT,
             )
 
     async def validate_extension(self):
@@ -60,7 +62,7 @@ class CreateContentValidator:
             raise ValidateError(
                 f"Invalid file extension: {self.extension}. "
                 "Valid extensions: txt, docx, xlsx, pptx, png, jpeg, jpg",
-                status.HTTP_400_BAD_REQUEST
+                status.HTTP_400_BAD_REQUEST,
             )
         match self.category:
             case ContentCategory.GALLERY:
@@ -68,18 +70,16 @@ class CreateContentValidator:
                     raise ValidateError(
                         "Invalid file extension for gallery content. "
                         "Valid extensions: png, jpg, jpeg",
-                        status.HTTP_400_BAD_REQUEST
+                        status.HTTP_400_BAD_REQUEST,
                     )
             case _:
                 if self.extension not in ["txt", "docx", "xlsx", "pptx"]:
                     raise ValidateError(
                         "Invalid file extension for document content. "
                         "Valid extensions: txt, docx, xlsx, pptx",
-                        status.HTTP_400_BAD_REQUEST
+                        status.HTTP_400_BAD_REQUEST,
                     )
 
     async def validate_category(self):
         if self.category not in ContentCategory:
-            raise ValidateError(
-                "Invalid category", status.HTTP_400_BAD_REQUEST
-            )
+            raise ValidateError("Invalid category", status.HTTP_400_BAD_REQUEST)

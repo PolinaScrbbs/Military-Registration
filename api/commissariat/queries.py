@@ -30,18 +30,7 @@ async def create_commissariat(
     await session.commit()
     await session.refresh(commissariat)
 
-    commissariat_with_commissioner = await session.execute(
-        select(Commissariat)
-        .options(
-            selectinload(Commissariat.commissioner),
-            selectinload(Commissariat.phones),
-            selectinload(Commissariat.urls),
-        )
-        .where(Commissariat.id == commissariat.id)
-    )
-
-    commissariat = commissariat_with_commissioner.scalars().first()
-
+    commissariat = await get_commissariat_by_id(session, commissariat.id)
     return commissariat
 
 
@@ -62,3 +51,26 @@ async def get_commissariats(session: AsyncSession) -> List[CommissariatResponse]
         )
 
     return [await commissariat.to_pydantic() for commissariat in commissariats]
+
+
+async def get_commissariat_by_id(
+    session: AsyncSession, commissariat_id: int
+) -> Commissariat:
+    result = await session.execute(
+        select(Commissariat)
+        .options(
+            selectinload(Commissariat.commissioner),
+            selectinload(Commissariat.phones),
+            selectinload(Commissariat.urls),
+        )
+        .where(Commissariat.id == commissariat_id)
+    )
+
+    commissariat = result.scalar_one_or_none()
+
+    if not commissariat:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Commissariat not found"
+        )
+
+    return commissariat

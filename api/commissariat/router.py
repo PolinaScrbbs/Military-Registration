@@ -33,3 +33,12 @@ async def get_commissariats(
 ):
     commissariats = await qr.get_commissariats(session)
     return commissariats
+
+
+@router.get("/{commissariat_id}", response_model=CommissariatResponse)
+async def get_commissariat(
+    commissariat_id: int,
+    session: AsyncSession = Depends(get_session),
+):
+    commissariat = await qr.get_commissariat_by_id(session, commissariat_id)
+    return await commissariat.to_pydantic()

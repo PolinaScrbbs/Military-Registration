@@ -1,0 +1,7 @@
+@import '__navbar.css';
+@import "__footer.css";
+
+.content{
+    height: 86vh;
+    padding: 2.5vh 15vw;
+}

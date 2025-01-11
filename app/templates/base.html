@@ -4,19 +4,20 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{{ title }}</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+	{% block styles %} {% endblock styles %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/null.css') }}">
 </head>
 <body>
 	<div class="navbar">
 		<div class="navbar__container">
-			<div class="navbar__title">Воинский учёт</div>
+			<div class="navbar__title">Воинский учёт </div>
 		</div>
 	</div>
 	<div class="content">
 		{% block content %} {% endblock %}
 	</div>
 	<div class="footer">
-		<div class="footer__title">Made in KGPK</div>
+		<div class="footer__title">© ОБПОУ «КГПК», 2025. Все права защищены.</div>
 	</div>
 </body>
 </html>

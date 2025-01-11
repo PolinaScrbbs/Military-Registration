@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% block styles %} <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"> {% endblock styles%}
 {% block content %}
 <div class="folders__container">
 	<div class="folders__line">
@@ -8,7 +8,7 @@
 				<div class="folder__title">Нормативные документы</div>
 			</div>
 		</a>
-		<a class="folder__container" href="#">
+		<a class="folder__container" href="{{ url_for('documents_router.page', category='document_for_military_registration') }}">
 			<div class="folder__icon" style="background-image: url({{ url_for('static', filename='icons/folder.svg') }});">
 				<div class="folder__title">Перечень документов для ВУ</div>
 			</div>
@@ -25,12 +25,12 @@
 		</a>
 
 	<div class="folders__line">
-		<a class="folder__container">
+		<a class="folder__container" href="{{ url_for('documents_router.page', category='contract_service_document') }}">
 			<div class="folder__icon" style="background-image: url({{ url_for('static', filename='icons/folder.svg') }});">
 				<div class="folder__title">Служба по контракту</div>
 			</div>
 		</a>
-		<a class="folder__container">
+		<a class="folder__container" href="{{ url_for('documents_router.page', category='alternative_civilian_service_document') }}">
 			<div class="folder__icon" style="background-image: url({{ url_for('static', filename='icons/folder.svg') }});">
 				<div class="folder__title">АГС</div>
 			</div>
@@ -53,9 +53,9 @@
 				<div class="folder__title">Архив</div>
 			</div>
 		</a>
-		<a class="folder__container">
+		<a class="folder__container" href="{{ url_for('documents_router.page', category='gallery') }}">
 			<div class="folder__icon" style="background-image: url({{ url_for('static', filename='icons/folder.svg') }});">
-				<div class="folder__title">Галерея</div>
+				<div class="folder__title">Галлерея</div>
 			</div>
 		</a>
 		<a class="folder__container">

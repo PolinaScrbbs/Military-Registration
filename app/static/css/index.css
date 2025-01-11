@@ -1,0 +1,10 @@
+@import 'null.css';
+@import '__navbar.css';
+@import "__footer.css";
+@import "__folders.css";
+
+.content{
+    height: 86vh;
+    padding: 0 15vw;
+}
+

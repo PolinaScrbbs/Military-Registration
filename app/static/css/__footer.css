@@ -1,0 +1,16 @@
+.footer {
+    width: 100vw;
+    height: 7vh;
+    background-color: #619d44;
+    align-content: center;
+    text-align: center;
+}
+
+.footer__title{
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 0;
+    padding: 10px 20px;
+}
+

@@ -3,7 +3,7 @@
 {% block content %}
 <div class="folders__container">
 	<div class="folders__line">
-		<a class="folder__container">
+		<a class="folder__container" href="{{ url_for('documents_router.page', category='regulatory_document') }}">
 			<div class="folder__icon" style="background-image: url({{ url_for('static', filename='icons/folder.svg') }});">
 				<div class="folder__title">Нормативные документы</div>
 			</div>

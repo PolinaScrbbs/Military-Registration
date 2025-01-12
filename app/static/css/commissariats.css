@@ -1,0 +1,23 @@
+@import 'base.css';
+
+.commissariat-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: center;
+}
+.commissariat-table th, .commissariat-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+.commissariat-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+.commissariat-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.commissariat-table tr:hover {
+    background-color: #f1f1f1;
+}

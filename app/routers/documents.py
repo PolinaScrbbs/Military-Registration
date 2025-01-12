@@ -1,4 +1,4 @@
-from quart import Blueprint, render_template
+from quart import Blueprint, render_template, request, jsonify
 
 from ..responses.documents import get_documents
 
@@ -13,3 +13,10 @@ async def page(category: str):
         "documents": documents,
     }
     return await render_template(f"documents.html", **context)
+
+
+@documents_router.route("/documents/create/<category>")
+async def create_document_form(category: str):
+    token = request.cookies.get("access_token")
+    if not token:
+        return jsonify({"message": "Unauthorized"}), 403

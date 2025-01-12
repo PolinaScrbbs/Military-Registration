@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock styles %}
+
+{% block content %}
+    <div class="login-container">
+        <h2>Авторизация</h2>
+        <form method="POST" action="{{ url_for('auth_router.login') }}">
+            <div class="form-group">
+                <label for="username">Имя пользователя</label>
+                <input type="text" id="username" name="username" required placeholder="Введите имя пользователя">
+            </div>
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" required placeholder="Введите пароль">
+            </div>
+            <button type="submit" class="login-btn">Войти</button>
+        </form>
+        {% if error_message %}
+            <div class="error-message">
+                <p>{{ error_message }}</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

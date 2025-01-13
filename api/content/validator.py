@@ -72,6 +72,13 @@ class CreateContentValidator:
                         "Valid extensions: png, jpg, jpeg",
                         status.HTTP_400_BAD_REQUEST,
                     )
+            case ContentCategory.STUDENTS:
+                if self.extension not in ["docx"]:
+                    raise ValidateError(
+                        "Invalid file extension for students content. "
+                        "Valid extensions: docx",
+                        status.HTTP_400_BAD_REQUEST,
+                    )
             case _:
                 if self.extension not in ["txt", "docx", "xlsx", "pptx"]:
                     raise ValidateError(

@@ -20,6 +20,7 @@ class ContentCategory(BaseEnum):
     DOCUMENT_FOR_MILITARY_REGISTRATION = "document_for_military_registration"
     ALTERNATIVE_CIVILIAN_SERVICE_DOCUMENT = "alternative_civilian_service_document"
     CONTRACT_SERVICE_DOCUMENT = "contract_service_document"
+    STUDENTS = "students"
     GALLERY = "gallery"
 
 

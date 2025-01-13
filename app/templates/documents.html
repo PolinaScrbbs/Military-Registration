@@ -7,27 +7,23 @@
     <table class="document-table">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Название файла</th>
                 <th>Путь</th>
                 <th>Категория</th>
                 <th>Создатель</th>
                 <th>Дата создания</th>
                 <th>Дата обновления</th>
-                <th>Архивный</th>
             </tr>
         </thead>
         <tbody>
             {% for document in documents %}
             <tr>
-                <td>{{ document.id }}</td>
                 <td>{{ document.filename }}</td>
                 <td><a href="http://localhost:8000/{{ document.path }}" class="download-link" download>Скачать</a></td>
                 <td>{{ document.category }}</td>
                 <td>{{ document.creator.full_name }}</td>
                 <td>{{ document.created_at }}</td>
                 <td>{{ document.last_updated_at or 'Не обновлялось' }}</td>
-                <td>{{ 'Да' if document.is_archived else 'Нет' }}</td>
             </tr>
             {% endfor %}
         </tbody>

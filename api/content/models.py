@@ -22,6 +22,9 @@ class ContentCategory(BaseEnum):
     CONTRACT_SERVICE_DOCUMENT = "contract_service_document"
     STUDENTS = "students"
     GALLERY = "gallery"
+    PATRIOTIC_EDUCATION = "patriotic_education"
+    EVENTS = "events"
+    MILITARY_TRAINING_CAMPS = "military_training_camps"
 
 
 class Content(Base):

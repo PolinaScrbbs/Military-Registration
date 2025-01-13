@@ -24,3 +24,4 @@ class ContentResponse(ID):
 class GetContentFilters(BaseModel):
     category: Optional[ContentCategory] = None
     creator: Optional[str] = None
+    archived: bool = False

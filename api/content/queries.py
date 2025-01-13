@@ -74,7 +74,7 @@ async def create_content(
 async def get_contents(
     session: AsyncSession, filters: GetContentFilters
 ) -> List[ContentResponse]:
-    query = select(Content).options(selectinload(Content.creator))
+    query = select(Content).options(selectinload(Content.creator)).where(Content.is_archived == filters.archived)
 
     conditions = []
     if filters.category:

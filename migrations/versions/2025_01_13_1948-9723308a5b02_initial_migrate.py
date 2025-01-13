@@ -1,8 +1,8 @@
 """Initial Migrate
 
-Revision ID: b2f4f6f76056
+Revision ID: 9723308a5b02
 Revises: 
-Create Date: 2025-01-13 15:46:20.836762
+Create Date: 2025-01-13 19:48:26.703130
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'b2f4f6f76056'
+revision: str = '9723308a5b02'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -51,7 +51,7 @@ def upgrade() -> None:
     sa.Column('filename', sa.String(length=256), nullable=False),
     sa.Column('path', sa.String(length=256), nullable=False),
     sa.Column('creator_id', sa.Integer(), nullable=True),
-    sa.Column('category', sa.Enum('REGULATORY_DOCUMENT', 'DOCUMENT_FOR_MILITARY_REGISTRATION', 'ALTERNATIVE_CIVILIAN_SERVICE_DOCUMENT', 'CONTRACT_SERVICE_DOCUMENT', 'STUDENTS', 'GALLERY', name='contentcategory'), nullable=False),
+    sa.Column('category', sa.Enum('REGULATORY_DOCUMENT', 'DOCUMENT_FOR_MILITARY_REGISTRATION', 'ALTERNATIVE_CIVILIAN_SERVICE_DOCUMENT', 'CONTRACT_SERVICE_DOCUMENT', 'STUDENTS', 'GALLERY', 'PATRIOTIC_EDUCATION', 'EVENTS', 'MILITARY_TRAINING_CAMPS', name='contentcategory'), nullable=False),
     sa.Column('is_archived', sa.Boolean(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('last_updated_at', sa.DateTime(), nullable=True),

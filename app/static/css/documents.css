@@ -4,7 +4,10 @@
     height: 86vh;
     padding: 2.5vh 15vw;
     justify-items: center;
+}
 
+.document-table.container{
+    width: auto;
 }
 
 .document-table {
@@ -34,4 +37,25 @@
 }
 .download-link:hover {
     text-decoration: underline;
+}
+
+.add-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+    background-color: #45a049;
+}
+
+.add-button-container {
+    margin-bottom: 20px;
+    text-align: right;
+
 }

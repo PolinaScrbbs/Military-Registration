@@ -3,8 +3,16 @@
 {% block styles %} <link rel="stylesheet" href="{{ url_for('static', filename='css/documents.css') }}"> {% endblock styles%}
 
 {% block content %}
+
+
 {% if documents %}
-    <table class="document-table">
+
+    <div class="document-table.container">
+        <div class="add-button-container">
+            <a href="{{ url_for('documents_router.add_document', category=category) }}" class="add-button">Добавить</a>
+        </div>
+        <table class="document-table">
+
         <thead>
             <tr>
                 <th>Название файла</th>
@@ -28,7 +36,9 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
+
 {% else %}
-Список пуст
+<p>Список пуст</p>
 {% endif %}
 {% endblock %}

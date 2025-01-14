@@ -1,15 +1,16 @@
-from quart import Blueprint, render_template, request, jsonify
-from quart_jwt_extended import set_access_cookies, create_access_token
-import jwt
+from urllib.parse import unquote
+from quart import Blueprint, render_template, request, redirect, url_for
+from quart_jwt_extended import set_access_cookies
 
-from ..config import API_SECRET_KEY
 from ..responses import login as login_response
 
 auth_router = Blueprint("auth_router", __name__)
 
-
 @auth_router.route("/login", methods=["GET", "POST"])
 async def login():
+    next_url = request.args.get("next", url_for("index.index"))
+    error_message = None
+
     if request.method == "POST":
         form = await request.form
         username = form.get("username")
@@ -17,17 +18,15 @@ async def login():
 
         status, response_data = await login_response(username, password)
 
-        if status == 200:
-            external_token  = response_data["access_token"]
-            decoded_token = jwt.decode(external_token, API_SECRET_KEY, algorithms=["HS256"])
-            identity = decoded_token.get("sub")
+        if status in [200, 201]:
+            external_token = response_data["access_token"]
 
-            new_token = create_access_token(identity=identity)
+            next_url = unquote(next_url)
+            resp = redirect(next_url)
 
-            resp = jsonify(message="Login successful")
-            set_access_cookies(resp, new_token)
+            set_access_cookies(resp, external_token)
             return resp
 
-        return "Ошибка авторизации"
+        error_message = response_data["detail"]
 
-    return await render_template("login.html")
+    return await render_template("login.html", next=next_url, error_message=error_message)

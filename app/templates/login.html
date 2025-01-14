@@ -7,7 +7,7 @@
 {% block content %}
     <div class="login-container">
         <h2>Авторизация</h2>
-        <form method="POST" action="{{ url_for('auth_router.login') }}">
+        <form method="POST" action="{{ url_for('auth_router.login', next=next) }}">
             <div class="form-group">
                 <label for="username">Имя пользователя</label>
                 <input type="text" id="username" name="username" required placeholder="Введите имя пользователя">

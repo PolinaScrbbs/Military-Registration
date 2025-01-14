@@ -1,3 +1,4 @@
+import uuid
 from enum import Enum as baseEnum
 from typing import Optional
 import jwt
@@ -47,9 +48,10 @@ class User(Base):
 
     async def generate_token(self, token_lifetime: int = conf.token_lifetime) -> str:
         payload = {
-            "user_id": self.id,
+            "identity": self.id,
             "exp": datetime.now(pytz.timezone("Europe/Moscow"))
             + timedelta(seconds=token_lifetime),
+            "csrf": str(uuid.uuid4())
         }
         return jwt.encode(payload, conf.secret_key, algorithm="HS256")
 

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/document_details.css') }}">
+{% endblock styles %}
+
+{% block content %}
+<p class="document-details-title"> Детали документа </p>
+
+<div class="document-details">
+    <p><strong>ID документа:</strong> {{ document.id }}</p>
+    <p><strong>Название файла:</strong> {{ document.filename }}</p>
+    <p><strong>Категория:</strong> {{ document.category }}</p>
+    <p><strong>Создатель:</strong> {{ document.creator.full_name }} ({{ document.creator.username }}, {{ document.creator.role }})</p>
+    <p><strong>Дата создания:</strong> {{ document.created_at }}</p>
+    <p><strong>Дата обновления:</strong> {{ document.last_updated_at or 'Не обновлялось' }}</p>
+    <p><strong>Путь:</strong> <a href="http://localhost:8000/{{ document.path }}" download>Скачать файл</a></p>
+    <p class="{{ 'archived' if document.is_archived else 'active' }}">
+        <strong>Архивировано:</strong> {{ 'Да' if document.is_archived else 'Нет' }}
+    </p>
+</div>
+{% endblock %}

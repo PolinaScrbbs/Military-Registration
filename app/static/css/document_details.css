@@ -1,0 +1,51 @@
+@import 'base.css';
+
+.document-details-title {
+    text-align: center;
+    margin-top: 20px;
+    color: #444;
+    font-size: 28px;!important;
+}
+
+.document-details {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.document-details p {
+    margin: 10px 0;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.document-details p strong {
+    color: #222;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.document-details a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.document-details a:hover {
+    text-decoration: underline;
+}
+
+.archived {
+    color: red;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.active {
+    color: green;
+    font-weight: bold;
+    font-size: 18px;
+}

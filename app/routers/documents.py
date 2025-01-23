@@ -1,8 +1,10 @@
-from quart import Blueprint, render_template, request, jsonify, redirect, url_for
-import jwt
-
-from ..config import SECRET_KEY
-from ..responses import get_documents, get_archived_documents, post_document
+from quart import Blueprint, render_template, request, redirect, url_for
+from ..responses import (
+    get_documents,
+    get_archived_documents,
+    post_document,
+    get_document,
+)
 
 documents_router = Blueprint("documents_router", __name__)
 
@@ -38,7 +40,9 @@ async def add_document(category: str):
         else:
             try:
                 file_bytes = uploaded_file.read()
-                result, error = await post_document(token, filename, category, file_bytes, uploaded_file.filename)
+                result, error = await post_document(
+                    token, filename, category, file_bytes, uploaded_file.filename
+                )
 
                 if result:
                     return redirect(url_for("documents_router.page", category=category))
@@ -47,14 +51,19 @@ async def add_document(category: str):
             except Exception as e:
                 error_message = f"Произошла ошибка: {str(e)}"
 
-    return await render_template("add_document.html", category=category, error_message=error_message)
+    return await render_template(
+        "add_document.html", category=category, error_message=error_message
+    )
 
 
 @documents_router.route("/documents/archive")
 async def archive():
     _, documents = await get_archived_documents()
-    context = {
-        "title": "Archive",
-        "documents": documents
-    }
+    context = {"title": "Archive", "documents": documents}
     return await render_template(f"documents.html", **context)
+
+
+@documents_router.route("/documents/<int:document_id>")
+async def document_details(document_id):
+    _, response_data = await get_document(document_id)
+    return await render_template("document_details.html", document=response_data)

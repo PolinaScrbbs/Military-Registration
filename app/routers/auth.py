@@ -6,6 +6,7 @@ from ..responses import login as login_response
 
 auth_router = Blueprint("auth_router", __name__)
 
+
 @auth_router.route("/login", methods=["GET", "POST"])
 async def login():
     next_url = request.args.get("next", url_for("index.index"))
@@ -29,4 +30,6 @@ async def login():
 
         error_message = response_data["detail"]
 
-    return await render_template("login.html", next=next_url, error_message=error_message)
+    return await render_template(
+        "login.html", next=next_url, error_message=error_message
+    )

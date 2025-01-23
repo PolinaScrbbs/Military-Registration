@@ -25,7 +25,7 @@
         </thead>
         <tbody>
             {% for document in documents %}
-            <tr>
+            <tr onclick="window.location='{{ url_for('documents_router.document_details', document_id=document.id) }}';" class="clickable-row">
                 <td>{{ document.filename }}</td>
                 <td><a href="http://localhost:8000/{{ document.path }}" class="download-link" download>Скачать</a></td>
                 <td>{{ document.category }}</td>
@@ -39,6 +39,8 @@
     </div>
 
 {% else %}
-<p>Список пуст</p>
+<div class="add-button-container">
+    <a href="{{ url_for('documents_router.add_document', category=category) }}" class="add-button">Добавить</a>
+</div>
 {% endif %}
 {% endblock %}

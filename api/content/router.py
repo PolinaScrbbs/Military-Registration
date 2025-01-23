@@ -7,7 +7,12 @@ from ..auth.middleware import get_current_user
 from ..user.middleware import role_checker
 from ..user.models import User, Role
 
-from .schemes import NewContent, ContentResponse, GetContentFilters
+from .schemes import (
+    NewContent,
+    ContentResponse,
+    GetContentFilters,
+    ContentUpdateRequest,
+)
 from . import queries as qr
 
 
@@ -44,3 +49,15 @@ async def get_content(
 ):
     content = await qr.get_content(session, content_id)
     return await content.to_pydantic()
+
+
+@router.patch("/{content_id}", response_model=ContentResponse)
+async def update_content(
+    content_id: int,
+    update_data: ContentUpdateRequest = Depends(),
+    session: AsyncSession = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    await role_checker(current_user, [Role.ADMIN], "only admin can update content")
+    updated_content = await qr.update_content(session, content_id, update_data)
+    return updated_content

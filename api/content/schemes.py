@@ -25,3 +25,9 @@ class GetContentFilters(BaseModel):
     category: Optional[ContentCategory] = None
     creator: Optional[str] = None
     archived: bool = False
+
+
+class ContentUpdateRequest(BaseModel):
+    filename: Optional[str] = None
+    category: Optional[ContentCategory] = None
+    is_archived: Optional[bool] = None

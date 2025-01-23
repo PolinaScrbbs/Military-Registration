@@ -51,7 +51,7 @@ class User(Base):
             "identity": self.id,
             "exp": datetime.now(pytz.timezone("Europe/Moscow"))
             + timedelta(seconds=token_lifetime),
-            "csrf": str(uuid.uuid4())
+            "csrf": str(uuid.uuid4()),
         }
         return jwt.encode(payload, conf.secret_key, algorithm="HS256")
 

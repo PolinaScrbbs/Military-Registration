@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 from typing import List
 
@@ -11,8 +12,13 @@ from ..user.validator import user_exists_by_username
 
 from config import config as conf
 from .models import Content, ContentCategory
-from .schemes import NewContent, ContentResponse, GetContentFilters
-from .validator import CreateContentValidator
+from .schemes import (
+    NewContent,
+    ContentResponse,
+    GetContentFilters,
+    ContentUpdateRequest,
+)
+from .validator import CreateContentValidator, UpdateContentValidator
 
 
 async def upload_content(
@@ -74,7 +80,11 @@ async def create_content(
 async def get_contents(
     session: AsyncSession, filters: GetContentFilters
 ) -> List[ContentResponse]:
-    query = select(Content).options(selectinload(Content.creator)).where(Content.is_archived == filters.archived)
+    query = (
+        select(Content)
+        .options(selectinload(Content.creator))
+        .where(Content.is_archived == filters.archived)
+    )
 
     conditions = []
     if filters.category:
@@ -119,3 +129,32 @@ async def get_content(session: AsyncSession, content_id: int) -> Content:
         )
 
     return content
+
+
+async def update_content(
+    session: AsyncSession, content_id: int, update_data: ContentUpdateRequest
+) -> ContentResponse:
+    validator = UpdateContentValidator(
+        content_id,
+        update_data.filename,
+        update_data.category,
+        update_data.is_archived,
+        session,
+    )
+    await validator.validate()
+
+    content = await get_content(session, content_id)
+
+    if update_data.filename:
+        content.filename = update_data.filename
+    if update_data.category:
+        content.category = update_data.category
+    if update_data.is_archived is not None:
+        if update_data.is_archived:
+            await content.archive()
+        else:
+            await content.unarchived()
+    content.last_updated_at = datetime.now()
+
+    await session.commit()
+    return await content.to_pydantic()

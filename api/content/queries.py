@@ -169,3 +169,9 @@ async def update_content(
 
     await session.commit()
     return await content.to_pydantic()
+
+
+async def delete_content(session: AsyncSession, content_id: int):
+    content = await get_content(session, content_id)
+    await session.delete(content)
+    await session.commit()

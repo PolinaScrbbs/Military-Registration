@@ -63,7 +63,17 @@ async def update_content(
     session: AsyncSession = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):
-    print(update_data)
     await role_checker(current_user, [Role.ADMIN], "only admin can upload content")
     updated_content = await qr.update_content(session, content_id, update_data)
     return updated_content
+
+
+@router.delete("/{content_id}")
+async def delete_content(
+    content_id: int,
+    session: AsyncSession = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    await role_checker(current_user, [Role.ADMIN], "only admin can delete content")
+    await qr.delete_content(session, content_id)
+    return {"detail": "Content successfully deleted"}

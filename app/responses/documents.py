@@ -60,3 +60,21 @@ async def get_document(document_id: int) -> Tuple[int, Optional[List[dict]]]:
             return response.status, (
                 await response.json() if response.status == 200 else None
             )
+
+
+async def get_categories() -> Tuple[int, Optional[dict]]:
+    async with aiohttp.ClientSession(API_URL) as session:
+        async with session.get("/content/categories") as response:
+            return response.status, await response.json()
+
+
+async def update_document(
+    token: str, document_id: int, data: dict
+) -> Tuple[int, Optional[dict]]:
+    async with aiohttp.ClientSession(API_URL) as session:
+        async with session.patch(
+            f"/content/{document_id}",
+            headers={"Authorization": f"Bearer {token}"},
+            json=data,
+        ) as response:
+            return response.status, await response.json()

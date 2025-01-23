@@ -6,19 +6,20 @@
 
 
 {% if documents %}
-
     <div class="document-table.container">
-        <div class="add-button-container">
-            <a href="{{ url_for('documents_router.add_document', category=category) }}" class="add-button">Добавить</a>
-        </div>
+        {% if category != "archive" %}
+            <div class="add-button-container">
+                <a href="{{ url_for('documents_router.add_document', category=category) }}" class="add-button">Добавить</a>
+            </div>
+        {% endif %}
         <table class="document-table">
-
         <thead>
             <tr>
                 <th>Название файла</th>
-                <th>Путь</th>
+                <th>Расширение файла</th>
                 <th>Категория</th>
                 <th>Создатель</th>
+                <th>Скачать</th>
                 <th>Дата создания</th>
                 <th>Дата обновления</th>
             </tr>
@@ -27,9 +28,10 @@
             {% for document in documents %}
             <tr onclick="window.location='{{ url_for('documents_router.document_details', document_id=document.id) }}';" class="clickable-row">
                 <td>{{ document.filename }}</td>
-                <td><a href="http://localhost:8000/{{ document.path }}" class="download-link" download>Скачать</a></td>
+                <td>{{ document.extension }}</td>
                 <td>{{ document.category }}</td>
                 <td>{{ document.creator.full_name }}</td>
+                <td><a href="http://localhost:8000/{{ document.path }}" class="download-link" download>Скачать</a></td>
                 <td>{{ document.created_at }}</td>
                 <td>{{ document.last_updated_at or 'Не обновлялось' }}</td>
             </tr>
@@ -39,8 +41,12 @@
     </div>
 
 {% else %}
-<div class="add-button-container">
-    <a href="{{ url_for('documents_router.add_document', category=category) }}" class="add-button">Добавить</a>
-</div>
+    {% if category != "archive" %}
+        <div class="add-button-container">
+            <a href="{{ url_for('documents_router.add_document', category=category) }}" class="add-button">Добавить</a>
+        </div>
+    {% else %}
+        <p class="empty-archive-message">Архив пуст</p>
+    {% endif %}
 {% endif %}
 {% endblock %}

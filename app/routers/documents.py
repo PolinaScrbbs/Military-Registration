@@ -4,6 +4,8 @@ from ..responses import (
     get_archived_documents,
     post_document,
     get_document,
+    update_document as updt_document,
+    get_categories,
 )
 
 documents_router = Blueprint("documents_router", __name__)
@@ -59,7 +61,7 @@ async def add_document(category: str):
 @documents_router.route("/documents/archive")
 async def archive():
     _, documents = await get_archived_documents()
-    context = {"title": "Archive", "documents": documents}
+    context = {"title": "Archive", "category": "archive", "documents": documents}
     return await render_template(f"documents.html", **context)
 
 
@@ -67,3 +69,50 @@ async def archive():
 async def document_details(document_id):
     _, response_data = await get_document(document_id)
     return await render_template("document_details.html", document=response_data)
+
+
+@documents_router.route("/update/<int:document_id>", methods=["POST", "GET"])
+async def update_document(document_id: int):
+    error_message = None
+
+    token = request.cookies.get("access_token")
+    if not token:
+        next_url = request.url
+        return redirect(url_for("auth_router.login", next=next_url))
+
+    if request.method == "POST":
+        form = await request.form
+        filename = form.get("filename")
+        category = form.get("category").lower()
+        is_archived = form.get("is_archived")
+
+        data = {
+            "filename": filename,
+            "category": category,
+            "is_archived": is_archived if is_archived else False,
+        }
+
+        status, response = await updt_document(token, document_id, data)
+
+        if status == 200:
+            return redirect(
+                url_for("documents_router.document_details", document_id=document_id)
+            )
+        elif status == 401:
+            next_url = request.url
+            return redirect(url_for("auth_router.login", next=next_url))
+        else:
+            error_message = response["detail"]
+
+    _, document_response = await get_document(document_id)
+    _, categories_response = await get_categories()
+
+    context = {
+        "title": "Update Document",
+        "document_id": document_id,
+        "categories": categories_response,
+        "document": document_response,
+        "error_message": error_message,
+    }
+
+    return await render_template("update_document.html", **context)

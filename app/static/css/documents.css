@@ -59,3 +59,15 @@
     text-align: right;
 
 }
+
+.empty-archive-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 28px;
+    color: #666;
+    font-weight: bold;
+}
+
+

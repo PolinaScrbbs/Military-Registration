@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add_document.css') }}">
+{% endblock styles %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Обновить документ</h2>
+
+    {% if error_message %}
+    <div class="error-message">
+        <p>{{ error_message }}</p>
+    </div>
+    {% endif %}
+    <form method="POST" action="{{ url_for('documents_router.update_document', document_id=document_id) }}" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="filename">Название файла</label>
+            <input type="text" id="filename" name="filename" value="{{ document.filename }}" placeholder="Введите новое название файла">
+        </div>
+        <div class="form-group">
+            <label for="category">Категория</label>
+            <select id="category" name="category">
+                {% for category, category_name in categories.items() %}
+                    <option value="{{ category }}" {% if document.category == category_name %} selected {% endif %}>
+                        {{ category_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+        </div>
+        <div class="form-group">
+            <label for="is_archived">Архивировать</label>
+            <input type="checkbox" id="is_archived" name="is_archived" value="true" {% if document.is_archived %} checked {% endif %}>
+        </div>
+<!--        <div class="form-group">-->
+<!--            <label for="file">Новый файл (необязательно)</label>-->
+<!--            <input type="file" id="file" name="file">-->
+<!--        </div>-->
+        <button type="submit" class="submit-button">Обновить</button>
+    </form>
+</div>
+{% endblock %}
+

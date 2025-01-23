@@ -8,8 +8,13 @@
 <p class="document-details-title"> Детали документа </p>
 
 <div class="document-details">
+    <div class="buttons-container">
+        <a href="{{ url_for('documents_router.update_document', document_id=document.id) }}" class="update-button">Обновить</a>
+        <a href="#" class="delete-button">Удалить</a>
+    </div>
     <p><strong>ID документа:</strong> {{ document.id }}</p>
     <p><strong>Название файла:</strong> {{ document.filename }}</p>
+    <p><strong>Расширение файла:</strong> {{ document.extension }}</p>
     <p><strong>Категория:</strong> {{ document.category }}</p>
     <p><strong>Создатель:</strong> {{ document.creator.full_name }} ({{ document.creator.username }}, {{ document.creator.role }})</p>
     <p><strong>Дата создания:</strong> {{ document.created_at }}</p>

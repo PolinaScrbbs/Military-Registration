@@ -55,12 +55,23 @@ class User(Base):
         }
         return jwt.encode(payload, conf.secret_key, algorithm="HS256")
 
+    async def format_full_name_to_initials(self) -> str:
+        name_parts = self.full_name.split()
+
+        if len(name_parts) < 2:
+            return self.full_name
+
+        last_name = name_parts[0]
+        initials = "".join([part[0].upper() + "." for part in name_parts[1:]])
+
+        return f"{last_name} {initials}"
+
     async def to_base_user(self):
         return {
             "id": self.id,
             "username": self.username,
-            "full_name": self.full_name,
-            "role": self.role,
+            "full_name": await self.format_full_name_to_initials(),
+            "role": "Администратор" if self.role == Role.ADMIN else "Пользователь",
         }
 
 

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from fastapi import UploadFile, Form
 
 from ..user.schemes import BaseModel, ID, BaseUser
@@ -13,8 +13,9 @@ class NewContent(BaseModel):
 
 class ContentResponse(ID):
     filename: str
+    extension: str
     path: str
-    category: ContentCategory
+    category: str
     creator: BaseUser
     is_archived: bool
     created_at: str

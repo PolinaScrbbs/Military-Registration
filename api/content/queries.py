@@ -1,6 +1,6 @@
 from datetime import datetime
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 from fastapi import UploadFile, HTTPException, status
 from sqlalchemy import select
@@ -21,13 +21,17 @@ from .schemes import (
 from .validator import CreateContentValidator, UpdateContentValidator
 
 
+async def get_categories() -> dict:
+    return await ContentCategory.get_category_names()
+
+
 async def upload_content(
     session: AsyncSession,
     file: UploadFile,
     user_folder: str,
     category: ContentCategory,
     filename: str,
-) -> str:
+) -> Tuple[str, str]:
     original_extension = Path(file.filename).suffix
     validator = CreateContentValidator(
         filename=filename,
@@ -46,7 +50,7 @@ async def upload_content(
     with open(file_path, "wb") as f:
         f.write(await file.read())
 
-    return str(file_path)
+    return str(file_path), original_extension
 
 
 async def create_content(
@@ -55,7 +59,7 @@ async def create_content(
     current_user_username: str,
     new_content: NewContent,
 ) -> Content:
-    path = await upload_content(
+    path, extension = await upload_content(
         session,
         new_content.file,
         current_user_username,
@@ -67,6 +71,7 @@ async def create_content(
         filename=new_content.filename,
         category=new_content.category,
         path=path,
+        extension=extension,
         creator_id=current_user_id,
     )
 
@@ -134,11 +139,17 @@ async def get_content(session: AsyncSession, content_id: int) -> Content:
 async def update_content(
     session: AsyncSession, content_id: int, update_data: ContentUpdateRequest
 ) -> ContentResponse:
+    result = await session.execute(
+        select(Content.extension).where(Content.id == content_id)
+    )
+    extension = result.scalar()
+
     validator = UpdateContentValidator(
         content_id,
         update_data.filename,
         update_data.category,
         update_data.is_archived,
+        extension,
         session,
     )
     await validator.validate()

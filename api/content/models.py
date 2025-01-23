@@ -26,6 +26,26 @@ class ContentCategory(BaseEnum):
     EVENTS = "events"
     MILITARY_TRAINING_CAMPS = "military_training_camps"
 
+    @staticmethod
+    async def get_category_names() -> dict:
+        category_names = {
+            ContentCategory.REGULATORY_DOCUMENT: "Нормативный документ",
+            ContentCategory.DOCUMENT_FOR_MILITARY_REGISTRATION: "Документ для воинского учета",
+            ContentCategory.ALTERNATIVE_CIVILIAN_SERVICE_DOCUMENT: "Документ альтернативной гражданской службы",
+            ContentCategory.CONTRACT_SERVICE_DOCUMENT: "Документ контрактной службы",
+            ContentCategory.STUDENTS: "Студенты",
+            ContentCategory.GALLERY: "Галерея",
+            ContentCategory.PATRIOTIC_EDUCATION: "Патриотическое воспитание",
+            ContentCategory.EVENTS: "События",
+            ContentCategory.MILITARY_TRAINING_CAMPS: "Военные сборы",
+        }
+        return category_names
+
+    @staticmethod
+    async def get_category_name(category: "ContentCategory") -> str:
+        category_names = await ContentCategory.get_category_names()
+        return category_names.get(category, category.value)
+
 
 class Content(Base):
     __tablename__ = "contents"
@@ -33,6 +53,7 @@ class Content(Base):
     id = Column(Integer, primary_key=True)
     filename = Column(String(256), nullable=False)
     path = Column(String(256), nullable=False, unique=True)
+    extension = Column(String(7), nullable=False)
     creator_id = Column(Integer, ForeignKey("users.id"))
     category = Column(Enum(ContentCategory), nullable=False)
     is_archived = Column(Boolean, default=False)
@@ -58,8 +79,9 @@ class Content(Base):
         return {
             "id": self.id,
             "filename": self.filename,
+            "extension": self.extension,
             "path": self.path,
-            "category": self.category,
+            "category": await ContentCategory.get_category_name(self.category),
             "creator": await self.creator.to_base_user(),
             "is_archived": self.is_archived,
             "created_at": self.created_at.strftime(date_format),

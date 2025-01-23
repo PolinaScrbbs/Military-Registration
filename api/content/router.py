@@ -19,6 +19,11 @@ from . import queries as qr
 router = APIRouter(prefix="/content")
 
 
+@router.get("/categories", response_model=dict)
+async def get_categories():
+    return await qr.get_categories()
+
+
 @router.post("/upload", response_model=ContentResponse)
 async def upload_content(
     new_content: NewContent = Depends(),
@@ -54,10 +59,11 @@ async def get_content(
 @router.patch("/{content_id}", response_model=ContentResponse)
 async def update_content(
     content_id: int,
-    update_data: ContentUpdateRequest = Depends(),
+    update_data: ContentUpdateRequest,
     session: AsyncSession = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):
-    await role_checker(current_user, [Role.ADMIN], "only admin can update content")
+    print(update_data)
+    await role_checker(current_user, [Role.ADMIN], "only admin can upload content")
     updated_content = await qr.update_content(session, content_id, update_data)
     return updated_content

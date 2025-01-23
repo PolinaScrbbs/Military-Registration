@@ -1,4 +1,4 @@
-from quart import Blueprint, render_template, request, redirect, url_for
+from quart import Blueprint, render_template, request, redirect, url_for, jsonify
 from ..responses import (
     get_documents,
     get_archived_documents,
@@ -6,6 +6,7 @@ from ..responses import (
     get_document,
     update_document as updt_document,
     get_categories,
+    delete_document as dlt_document,
 )
 
 documents_router = Blueprint("documents_router", __name__)
@@ -42,14 +43,18 @@ async def add_document(category: str):
         else:
             try:
                 file_bytes = uploaded_file.read()
-                result, error = await post_document(
+                status, response = await post_document(
                     token, filename, category, file_bytes, uploaded_file.filename
                 )
 
-                if result:
+                if status == 200:
                     return redirect(url_for("documents_router.page", category=category))
+                elif status == 401:
+                    next_url = request.url
+                    return redirect(url_for("auth_router.login", next=next_url))
                 else:
-                    error_message = error.get("detail", "Ошибка загрузки документа")
+                    error_message = response["detail"]
+
             except Exception as e:
                 error_message = f"Произошла ошибка: {str(e)}"
 
@@ -65,15 +70,24 @@ async def archive():
     return await render_template(f"documents.html", **context)
 
 
-@documents_router.route("/documents/<int:document_id>")
+@documents_router.route("/document/<int:document_id>")
 async def document_details(document_id):
-    _, response_data = await get_document(document_id)
-    return await render_template("document_details.html", document=response_data)
+    category = request.args.get("category")
+    _, document = await get_document(document_id)
+
+    context = {
+        "title": document["filename"],
+        "category": category,
+        "document": document,
+    }
+
+    return await render_template("document_details.html", **context)
 
 
 @documents_router.route("/update/<int:document_id>", methods=["POST", "GET"])
 async def update_document(document_id: int):
     error_message = None
+    rq_category = request.args.get("category")
 
     token = request.cookies.get("access_token")
     if not token:
@@ -96,7 +110,11 @@ async def update_document(document_id: int):
 
         if status == 200:
             return redirect(
-                url_for("documents_router.document_details", document_id=document_id)
+                url_for(
+                    "documents_router.document_details",
+                    document_id=document_id,
+                    category=rq_category,
+                )
             )
         elif status == 401:
             next_url = request.url
@@ -116,3 +134,23 @@ async def update_document(document_id: int):
     }
 
     return await render_template("update_document.html", **context)
+
+
+@documents_router.route("/delete/<int:document_id>")
+async def delete_document(document_id):
+    category = request.args.get("category")
+
+    token = request.cookies.get("access_token")
+    if not token:
+        next_url = request.url
+        return redirect(url_for("auth_router.login", next=next_url))
+
+    status, response = await dlt_document(token, document_id)
+    if status == 200:
+        return redirect(url_for("documents_router.page", category=category))
+    elif status == 401:
+        next_url = request.url
+        return redirect(url_for("auth_router.login", next=next_url))
+    else:
+        error_message = response["detail"]
+        return jsonify({"error": error_message}), 400

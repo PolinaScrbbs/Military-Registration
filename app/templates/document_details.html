@@ -9,8 +9,8 @@
 
 <div class="document-details">
     <div class="buttons-container">
-        <a href="{{ url_for('documents_router.update_document', document_id=document.id) }}" class="update-button">Обновить</a>
-        <a href="#" class="delete-button">Удалить</a>
+        <a href="{{ url_for('documents_router.update_document', document_id=document.id, category=category) }}" class="update-button">Обновить</a>
+        <a href="{{ url_for('documents_router.delete_document', document_id=document.id, category=category) }}" class="delete-button">Удалить</a>
     </div>
     <p><strong>ID документа:</strong> {{ document.id }}</p>
     <p><strong>Название файла:</strong> {{ document.filename }}</p>
@@ -24,4 +24,5 @@
         <strong>Архивировано:</strong> {{ 'Да' if document.is_archived else 'Нет' }}
     </p>
 </div>
+
 {% endblock %}

@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
@@ -11,6 +12,9 @@ app = FastAPI(
     version="2.2.8",
 )
 
+if not os.path.exists(conf.media_root):
+    os.makedirs(conf.media_root)
+    print(f"Папка {conf.media_root} успешно создана.")
 app.mount("/media", StaticFiles(directory=conf.media_root), name="media")
 
 app.include_router(authRouter, tags=["Auth"])

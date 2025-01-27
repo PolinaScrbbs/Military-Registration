@@ -1,0 +1,13 @@
+ENV="development"
+
+HOST="localhost"
+PORT=5432
+DBNAME="Название бд"
+USER="Имя пользователя в бд"
+PASSWORD="Пароль пользователя бд"
+
+SECRET_KEY="Набор любых символов"
+TOKEN_LIFETIME=3600
+MEDIA_ROOT="media"
+
+API_URL="http://127.0.0.1:8000/"

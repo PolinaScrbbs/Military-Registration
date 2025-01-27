@@ -15,7 +15,7 @@
                 <div class="folder__title">Перечень документов для ВУ</div>
             </div>
         </a>
-        <a class="folder__container" href="{{ url_for('commissariats_router.page') }}">
+        <a class="folder__container" href="{{ url_for('documents_router.page', category='addresses_and_links') }}">
             <div class="folder__icon" style="background-image: url({{ url_for('static', filename='icons/folder.svg') }});">
                 <div class="folder__title">Адреса и ссылки</div>
             </div>
@@ -66,7 +66,7 @@
                 <div class="folder__title">Патриотическое воспитание</div>
             </div>
         </a>
-        <a class="folder__container">
+        <a class="folder__container" href="{{ url_for('documents_router.page', category='contacts') }}">
             <div class="folder__icon" style="background-image: url({{ url_for('static', filename='icons/folder.svg') }});">
                 <div class="folder__title">Контакты</div>
             </div>

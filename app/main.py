@@ -2,11 +2,10 @@ from datetime import timedelta
 from quart import Quart
 from quart_jwt_extended import JWTManager
 
-from .config import SECRET_KEY, API_SECRET_KEY
+from .config import API_SECRET_KEY
 
 from .routers import index_router
 from .routers import documents_router
-from .routers import commissariats_router
 from .routers import auth_router
 
 
@@ -24,7 +23,6 @@ jwt = JWTManager(app)
 
 app.register_blueprint(index_router)
 app.register_blueprint(documents_router)
-app.register_blueprint(commissariats_router)
 app.register_blueprint(auth_router)
 
 if __name__ == "__main__":

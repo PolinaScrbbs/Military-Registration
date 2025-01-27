@@ -4,7 +4,6 @@
 
 {% block content %}
 
-
 {% if documents %}
     <div class="document-table.container">
         {% if category != "archive" %}
@@ -12,6 +11,7 @@
                 <a href="{{ url_for('documents_router.add_document', category=category) }}" class="add-button">Добавить</a>
             </div>
         {% endif %}
+
         <table class="document-table">
         <thead>
             <tr>
@@ -45,8 +45,9 @@
         <div class="add-button-container">
             <a href="{{ url_for('documents_router.add_document', category=category) }}" class="add-button">Добавить</a>
         </div>
+        <p class="empty-archive-message">{{empty_category_message}}</p>
     {% else %}
-        <p class="empty-archive-message">Архив пуст</p>
+        <p class="empty-archive-message" style="height: 100%">{{empty_category_message}}</p>
     {% endif %}
 {% endif %}
 {% endblock %}

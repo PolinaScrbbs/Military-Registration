@@ -61,6 +61,12 @@ async def get_categories() -> Tuple[int, Optional[dict]]:
             return response.status, await response.json()
 
 
+async def get_category(category_name: str) -> Tuple[int, Optional[str]]:
+    async with aiohttp.ClientSession(API_URL) as session:
+        async with session.get(f"/content/category/{category_name}") as response:
+            return response.status, await response.json()
+
+
 async def update_document(
     token: str, document_id: int, data: dict
 ) -> Tuple[int, Optional[dict]]:

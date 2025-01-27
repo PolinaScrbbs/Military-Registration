@@ -6,8 +6,10 @@ from ..responses import (
     get_document,
     update_document as updt_document,
     get_categories,
+    get_category,
     delete_document as dlt_document,
 )
+from ..utils import get_empty_category_message
 
 documents_router = Blueprint("documents_router", __name__)
 
@@ -15,9 +17,11 @@ documents_router = Blueprint("documents_router", __name__)
 @documents_router.route("/documents/<category>")
 async def page(category: str):
     _, documents = await get_documents(category)
+    empty_category_message = await get_empty_category_message(category)
     context = {
         "title": f"{category.replace('_', ' ').capitalize()} Documents",
         "category": category,
+        "empty_category_message": empty_category_message,
         "documents": documents,
     }
     return await render_template(f"documents.html", **context)
@@ -58,15 +62,24 @@ async def add_document(category: str):
             except Exception as e:
                 error_message = f"Произошла ошибка: {str(e)}"
 
+    _, category_value = await get_category(category)
     return await render_template(
-        "add_document.html", category=category, error_message=error_message
+        "add_document.html",
+        category=category,
+        category_value=category_value.lower(),
+        error_message=error_message,
     )
 
 
 @documents_router.route("/documents/archive")
 async def archive():
     _, documents = await get_archived_documents()
-    context = {"title": "Archive", "category": "archive", "documents": documents}
+    context = {
+        "title": "Archive",
+        "category": "archive",
+        "empty_category_message": "Архив пуст",
+        "documents": documents,
+    }
     return await render_template(f"documents.html", **context)
 
 

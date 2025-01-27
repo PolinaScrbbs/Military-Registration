@@ -59,54 +59,27 @@ class CreateContentValidator:
             )
 
     async def validate_extension(self):
-        if self.extension not in [
-            "txt",
-            "docx",
-            "xlsx",
-            "pptx",
-            "png",
-            "jpeg",
-            "jpg",
-            "mp4",
-        ]:
+        valid_extensions = {
+            ContentCategory.GALLERY: ["png", "jpg", "jpeg"],
+            ContentCategory.STUDENTS: ["docx", "xlsx"],
+            ContentCategory.MILITARY_TRAINING_CAMPS: ["docx", "pptx", "mp4"],
+            ContentCategory.EVENTS: ["docx", "pptx", "mp4"],
+            ContentCategory.PATRIOTIC_EDUCATION: ["docx", "pptx", "mp4"],
+            ContentCategory.ADDRESS_AND_LINKS: ["docx", "xlsx"],
+            ContentCategory.CONTACTS: ["docx", "xlsx"],
+            "default": ["txt", "docx", "xlsx", "pptx"],
+        }
+
+        allowed_extensions = valid_extensions.get(
+            self.category, valid_extensions["default"]
+        )
+
+        if self.extension not in allowed_extensions:
             raise ValidateError(
-                f"Invalid file extension: {self.extension}. "
-                "Valid extensions: txt, docx, xlsx, pptx, png, jpeg, jpg, mp4",
+                f"Invalid file extension for {self.category.value.replace('_', ' ') if self.category else 'selected category'}. "
+                f"Valid extensions: {', '.join(allowed_extensions)}",
                 status.HTTP_400_BAD_REQUEST,
             )
-        match self.category:
-            case ContentCategory.GALLERY:
-                if self.extension not in ["png", "jpg", "jpeg"]:
-                    raise ValidateError(
-                        "Invalid file extension for gallery content. "
-                        "Valid extensions: png, jpg, jpeg",
-                        status.HTTP_400_BAD_REQUEST,
-                    )
-            case ContentCategory.STUDENTS:
-                if self.extension not in ["docx"]:
-                    raise ValidateError(
-                        "Invalid file extension for students content. "
-                        "Valid extensions: docx",
-                        status.HTTP_400_BAD_REQUEST,
-                    )
-            case (
-                ContentCategory.MILITARY_TRAINING_CAMPS
-                | ContentCategory.EVENTS
-                | ContentCategory.PATRIOTIC_EDUCATION
-            ):
-                if self.extension not in ["docx", "pptx", "mp4"]:
-                    raise ValidateError(
-                        f"Invalid file extension for {self.category.value.replace('_', ' ')}. "
-                        "Valid extensions: docx, pptx, mp4",
-                        status.HTTP_400_BAD_REQUEST,
-                    )
-            case _:
-                if self.extension not in ["txt", "docx", "xlsx", "pptx"]:
-                    raise ValidateError(
-                        f"Invalid file extension for {self.category.value.replace('_', ' ')}. "
-                        "Valid extensions: txt, docx, xlsx, pptx",
-                        status.HTTP_400_BAD_REQUEST,
-                    )
 
     async def validate_category(self):
         if self.category not in ContentCategory:
@@ -193,6 +166,8 @@ class UpdateContentValidator:
             ContentCategory.MILITARY_TRAINING_CAMPS: [".docx", ".pptx", ".mp4"],
             ContentCategory.EVENTS: [".docx", ".pptx", ".mp4"],
             ContentCategory.PATRIOTIC_EDUCATION: [".docx", ".pptx", ".mp4"],
+            ContentCategory.ADDRESS_AND_LINKS: ["docx", "xlsx"],
+            ContentCategory.CONTACTS: ["docx", "xlsx"],
             "default": [".txt", ".docx", ".xlsx", ".pptx"],
         }
 

@@ -25,6 +25,8 @@ class ContentCategory(BaseEnum):
     PATRIOTIC_EDUCATION = "patriotic_education"
     EVENTS = "events"
     MILITARY_TRAINING_CAMPS = "military_training_camps"
+    ADDRESS_AND_LINKS = "addresses_and_links"
+    CONTACTS = "contacts"
 
     @staticmethod
     async def get_category_names() -> dict:
@@ -38,6 +40,8 @@ class ContentCategory(BaseEnum):
             ContentCategory.PATRIOTIC_EDUCATION: "Патриотическое воспитание",
             ContentCategory.EVENTS: "События",
             ContentCategory.MILITARY_TRAINING_CAMPS: "Военные сборы",
+            ContentCategory.ADDRESS_AND_LINKS: "Адреса и ссылки",
+            ContentCategory.CONTACTS: "Контакты",
         }
         return category_names
 

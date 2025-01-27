@@ -24,6 +24,11 @@ async def get_categories():
     return await qr.get_categories()
 
 
+@router.get("/category/{name}", response_model=str)
+async def get_category(name: str):
+    return await qr.get_category(name)
+
+
 @router.post("/upload", response_model=ContentResponse)
 async def upload_content(
     new_content: NewContent = Depends(),

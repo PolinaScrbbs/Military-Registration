@@ -25,6 +25,10 @@ async def get_categories() -> dict:
     return await ContentCategory.get_category_names()
 
 
+async def get_category(category_name: str) -> str:
+    return await ContentCategory.get_category_name(ContentCategory(category_name))
+
+
 async def upload_content(
     session: AsyncSession,
     file: UploadFile,

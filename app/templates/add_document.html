@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add_document.css') }}">
+{% endblock styles %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Добавить {{category_value}}</h2>
+
+    {% if error_message %}
+    <div class="error-message">
+        <p>{{ error_message }}</p>
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('documents_router.add_document', category=category) }}" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="filename">Название файла</label>
+            <input type="text" id="filename" name="filename" required placeholder="Введите название файла">
+        </div>
+        <div class="form-group">
+            <label for="file">Файл</label>
+            <input type="file" id="file" name="file" required>
+        </div>
+        <button type="submit" class="submit-button">Добавить</button>
+    </form>
+</div>
+{% endblock %}

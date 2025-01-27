@@ -1,0 +1,86 @@
+@import 'base.css';
+
+.content {
+    height: 86vh;
+    padding: 2.5vh 15vw;
+    justify-items: center;
+
+}
+
+/* Общие стили для формы */
+.form-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+/* Заголовок формы */
+.form-container h2 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Стили для каждого поля формы */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Метки для полей */
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+/* Поля ввода */
+.form-group input[type="text"],
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Кнопка отправки */
+.submit-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Эффект при наведении на кнопку */
+.submit-button:hover {
+    background-color: #45a049;
+}
+
+/* Уведомления об ошибках или успешных действиях */
+.error-message,
+.success-message {
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 5px;
+    background-color: #f2dede;
+    color: #a94442;
+    border: 1px solid #ebccd1;
+}
+
+.success-message {
+    background-color: #dff0d8;
+    border: 1px solid #d6e9c6;
+    color: #3c763d;
+}

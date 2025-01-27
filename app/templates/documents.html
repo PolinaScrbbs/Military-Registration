@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block styles %} <link rel="stylesheet" href="{{ url_for('static', filename='css/documents.css') }}"> {% endblock styles%}
+
+{% block content %}
+
+{% if documents %}
+    <div class="document-table.container">
+        {% if category != "archive" %}
+            <div class="add-button-container">
+                <a href="{{ url_for('documents_router.add_document', category=category) }}" class="add-button">Добавить</a>
+            </div>
+        {% endif %}
+
+        <table class="document-table">
+        <thead>
+            <tr>
+                <th>Название файла</th>
+                <th>Расширение файла</th>
+                <th>Категория</th>
+                <th>Создатель</th>
+                <th>Скачать</th>
+                <th>Дата создания</th>
+                <th>Дата обновления</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for document in documents %}
+            <tr onclick="window.location='{{ url_for('documents_router.document_details', document_id=document.id, category=category) }}';" class="clickable-row">
+                <td>{{ document.filename }}</td>
+                <td>{{ document.extension }}</td>
+                <td>{{ document.category }}</td>
+                <td>{{ document.creator.full_name }}</td>
+                <td><a href="http://localhost:8000/{{ document.path }}" class="download-link" download>Скачать</a></td>
+                <td>{{ document.created_at }}</td>
+                <td>{{ document.last_updated_at or 'Не обновлялось' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+{% else %}
+    {% if category != "archive" %}
+        <div class="add-button-container">
+            <a href="{{ url_for('documents_router.add_document', category=category) }}" class="add-button">Добавить</a>
+        </div>
+        <p class="empty-archive-message">{{empty_category_message}}</p>
+    {% else %}
+        <p class="empty-archive-message" style="height: 100%">{{empty_category_message}}</p>
+    {% endif %}
+{% endif %}
+{% endblock %}

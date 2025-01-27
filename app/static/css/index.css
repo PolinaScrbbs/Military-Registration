@@ -1,0 +1,45 @@
+@import 'base.css';
+
+.folders__container{
+    width: 100%;
+    height: 100%;
+    padding: 10vh 5vw 5vh 5vw;
+}
+
+.folders__line{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5vh;
+}
+
+.folder__container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.folder__icon {
+    width: 170px;
+    height: 150px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.folder__title {
+    width: 82%;
+    font-size: 18px;
+    padding: 2.3vh 0.9vw 0 0;
+    color: #000000;
+    margin: 0;
+    text-align: center;
+    position: absolute;
+}
+

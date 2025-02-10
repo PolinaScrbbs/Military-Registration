@@ -50,3 +50,17 @@ async def get_news_list(
     news_list = result.scalars().all()
     pydantic_news_list = [await news.to_pydantic() for news in news_list]
     return pydantic_news_list
+
+
+async def get_news(session: AsyncSession, news_id: int) -> News:
+    result = await session.execute(
+        select(News).options(selectinload(News.creator)).where(News.id == news_id)
+    )
+
+    news = result.scalar_one_or_none()
+    if not news:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="news not found"
+        )
+
+    return news

@@ -14,7 +14,7 @@ from . import queries as qr
 router = APIRouter(prefix="/news")
 
 
-@router.post("/", response_model=NewsResponse, status_code=201)
+@router.post("", response_model=NewsResponse, status_code=201)
 async def create_news(
     new_news_data: NewNews = Depends(),
     session: AsyncSession = Depends(get_session),
@@ -25,7 +25,7 @@ async def create_news(
     return new_news
 
 
-@router.get(path="_list/", response_model=List[NewsResponse])
+@router.get(path="_list", response_model=List[NewsResponse])
 async def get_news_list(
     skip: Optional[int] = Query(0, ge=0, description="Сколько записей пропустить"),
     limit: Optional[int] = Query(
@@ -33,5 +33,14 @@ async def get_news_list(
     ),
     session: AsyncSession = Depends(get_session),
 ):
-    news = await qr.get_news_list(session, skip, limit)
-    return news
+    news_list = await qr.get_news_list(session, skip, limit)
+    return news_list
+
+
+@router.get(path="/{news_id}", response_model=NewsResponse)
+async def get_news(
+    news_id: int,
+    session: AsyncSession = Depends(get_session),
+):
+    news = await qr.get_news(session, news_id)
+    return await news.to_pydantic()

@@ -35,6 +35,7 @@ class User(Base):
     role = Column(Enum(Role), default=Role.USER, nullable=False)
 
     contents = relationship("Content", back_populates="creator")
+    news = relationship("News", back_populates="creator")
 
     async def set_password(self, password: str) -> None:
         self.hashed_password = bcrypt.hashpw(

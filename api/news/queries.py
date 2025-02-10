@@ -82,3 +82,17 @@ async def update_news(
 
     await session.commit()
     return await news.to_pydantic()
+
+
+async def delete_news(
+    session: AsyncSession,
+    news_id: int,
+) -> None:
+    result = await session.execute(select(News).where(News.id == news_id))
+    news = result.scalar_one_or_none()
+    if not news:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="news not found"
+        )
+    await session.delete(news)
+    await session.commit()

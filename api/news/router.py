@@ -56,3 +56,14 @@ async def update_news(
     await role_checker(current_user, [Role.ADMIN], "only admin can update news")
     updated_news = await qr.update_news(session, news_id, news_update_data)
     return updated_news
+
+
+@router.delete("/{news_id}")
+async def delete_news(
+    news_id: int,
+    session: AsyncSession = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    await role_checker(current_user, [Role.ADMIN], "only admin can delete news")
+    await qr.delete_news(session, news_id)
+    return "news has deleted"

@@ -12,9 +12,9 @@ from ..user.validator import user_exists_by_username
 
 from config import config as conf
 from .models import News
-from .schemes import NewNews, NewsResponse
+from .schemes import NewNews, NewsResponse, NewsUpdateRequest
 
-from .validator import CreateNewsValidator
+from .validator import CreateNewsValidator, UpdateNewsValidator
 
 
 async def create_news(
@@ -64,3 +64,21 @@ async def get_news(session: AsyncSession, news_id: int) -> News:
         )
 
     return news
+
+
+async def update_news(
+    session: AsyncSession, news_id: int, update_data: NewsUpdateRequest
+) -> NewsResponse:
+    validator = UpdateNewsValidator(news_id, update_data, session)
+    await validator.validate()
+
+    news = await get_news(session, news_id)
+
+    if update_data.title:
+        news.title = update_data.title
+    if update_data.content:
+        news.content = update_data.content
+    news.last_updated_at = datetime.now()
+
+    await session.commit()
+    return await news.to_pydantic()

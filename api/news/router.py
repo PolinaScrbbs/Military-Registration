@@ -7,7 +7,7 @@ from ..auth.middleware import get_current_user
 from ..user.middleware import role_checker
 from ..user.models import User, Role
 
-from .schemes import NewNews, NewsResponse
+from .schemes import NewNews, NewsResponse, NewsUpdateRequest
 from . import queries as qr
 
 
@@ -44,3 +44,15 @@ async def get_news(
 ):
     news = await qr.get_news(session, news_id)
     return await news.to_pydantic()
+
+
+@router.patch("/{news_id}", response_model=NewsResponse)
+async def update_news(
+    news_id: int,
+    news_update_data: NewsUpdateRequest = Depends(),
+    session: AsyncSession = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    await role_checker(current_user, [Role.ADMIN], "only admin can update news")
+    updated_news = await qr.update_news(session, news_id, news_update_data)
+    return updated_news

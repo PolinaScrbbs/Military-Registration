@@ -12,3 +12,8 @@ class NewsResponse(NewNews, ID):
     creator: BaseUser
     created_at: str
     last_updated: Optional[str]
+
+
+class NewsUpdateRequest(BaseModel):
+    title: Optional[str] = None
+    content: Optional[str] = None

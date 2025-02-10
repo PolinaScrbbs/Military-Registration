@@ -14,13 +14,18 @@ from config import config as conf
 from .models import News
 from .schemes import NewNews, NewsResponse
 
-# from .validator import CreateContentValidator, UpdateContentValidator
+from .validator import CreateNewsValidator
 
 
 async def create_news(
     session: AsyncSession, new_news_data: NewNews, current_user_id: int
 ) -> NewsResponse:
-    # validator
+    validator = CreateNewsValidator(
+        title=new_news_data.title,
+        content=new_news_data.content,
+        session=session,
+    )
+    await validator.validate()
 
     new_news = News(
         title=new_news_data.title,

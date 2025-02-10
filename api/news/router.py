@@ -1,5 +1,5 @@
-from typing import List
-from fastapi import Depends, APIRouter
+from typing import List, Optional
+from fastapi import Depends, APIRouter, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..database import get_session
@@ -23,3 +23,15 @@ async def create_news(
     await role_checker(current_user, [Role.ADMIN], "only admin can create news")
     new_news = await qr.create_news(session, new_news_data, current_user.id)
     return new_news
+
+
+@router.get(path="_list/", response_model=List[NewsResponse])
+async def get_news_list(
+    skip: Optional[int] = Query(0, ge=0, description="Сколько записей пропустить"),
+    limit: Optional[int] = Query(
+        10, le=100, description="Максимальное количество записей"
+    ),
+    session: AsyncSession = Depends(get_session),
+):
+    news = await qr.get_news_list(session, skip, limit)
+    return news

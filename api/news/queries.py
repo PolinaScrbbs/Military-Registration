@@ -43,7 +43,9 @@ async def create_news(
 async def get_news_list(
     session: AsyncSession, skip: int, limit: int
 ) -> List[NewsResponse]:
-    result = await session.execute(select(News).offset(skip).limit(limit))
+    result = await session.execute(
+        select(News).options(selectinload(News.creator)).offset(skip).limit(limit)
+    )
 
     news_list = result.scalars().all()
     pydantic_news_list = [await news.to_pydantic() for news in news_list]

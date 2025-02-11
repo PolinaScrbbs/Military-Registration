@@ -9,7 +9,7 @@
 <div class="news__details__container">
 	<div class="buttons-container">
 		<a href="{{ url_for('news_router.update_news', news_id=news.id) }}" class="update-button">Обновить</a>
-		<a href="#" class="delete-button">Удалить</a>
+		<a href="{{ url_for('news_router.delete_news', news_id=news.id) }}" class="delete-button">Удалить</a>
 	</div>
 	<div class="news-details">
 		<p>{{ news.content }}</p>

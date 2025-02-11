@@ -1,5 +1,5 @@
 from quart import Blueprint, render_template, request, redirect, url_for, jsonify
-from ..responses import get_news, update_news as updt_news
+from ..responses import get_news, update_news as updt_news, delete_news as dlt_news
 
 news_router = Blueprint("news_router", __name__)
 
@@ -31,8 +31,6 @@ async def update_news(news_id: int):
             "content": content,
         }
 
-        print(data)
-
         status, response = await updt_news(token, news_id, data)
 
         if status == 200:
@@ -55,21 +53,20 @@ async def update_news(news_id: int):
     return await render_template("update_news.html", **context)
 
 
-# @documents_router.route("/delete/<int:document_id>")
-# async def delete_document(document_id):
-#     category = request.args.get("category")
-#
-#     token = request.cookies.get("access_token")
-#     if not token:
-#         next_url = request.url
-#         return redirect(url_for("auth_router.login", next=next_url))
-#
-#     status, response = await dlt_document(token, document_id)
-#     if status == 200:
-#         return redirect(url_for("documents_router.page", category=category))
-#     elif status == 401:
-#         next_url = request.url
-#         return redirect(url_for("auth_router.login", next=next_url))
-#     else:
-#         error_message = response["detail"]
-#         return jsonify({"error": error_message}), 400
+@news_router.route("/delete_news/<int:news_id>")
+async def delete_news(news_id: int):
+
+    token = request.cookies.get("access_token")
+    if not token:
+        next_url = request.url
+        return redirect(url_for("auth_router.login", next=next_url))
+
+    status, response = await dlt_news(token, news_id)
+    if status == 200:
+        return redirect(url_for("index.index"))
+    elif status == 401:
+        next_url = request.url
+        return redirect(url_for("auth_router.login", next=next_url))
+    else:
+        error_message = response["detail"]
+        return jsonify({"error": error_message}), 400

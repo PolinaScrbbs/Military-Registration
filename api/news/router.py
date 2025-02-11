@@ -53,7 +53,6 @@ async def update_news(
     session: AsyncSession = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):
-    print(news_update_data)
     await role_checker(current_user, [Role.ADMIN], "only admin can update news")
     updated_news = await qr.update_news(session, news_id, news_update_data)
     return updated_news

@@ -15,19 +15,18 @@
                 <div class="folder__title">Перечень документов для ВУ</div>
             </div>
         </a>
-        <a class="folder__container" href="{{ url_for('documents_router.page', category='addresses_and_links') }}">
+		<a class="folder__container" href="{{ url_for('documents_router.page', category='addresses_and_links') }}">
             <div class="folder__icon" style="background-image: url({{ url_for('static', filename='icons/folder.svg') }});">
                 <div class="folder__title">Адреса и ссылки</div>
             </div>
         </a>
+	</div>
+	<div class="folders__line">
         <a class="folder__container" href="{{ url_for('documents_router.page', category='students') }}">
             <div class="folder__icon" style="background-image: url({{ url_for('static', filename='icons/folder.svg') }});">
                 <div class="folder__title">Списки студентов</div>
             </div>
         </a>
-    </div>
-
-    <div class="folders__line">
         <a class="folder__container" href="{{ url_for('documents_router.page', category='contract_service_document') }}">
             <div class="folder__icon" style="background-image: url({{ url_for('static', filename='icons/folder.svg') }});">
                 <div class="folder__title">Служба по контракту</div>
@@ -38,6 +37,8 @@
                 <div class="folder__title">АГС</div>
             </div>
         </a>
+	</div>
+	<div class="folders__line">
         <a class="folder__container" href="{{ url_for('documents_router.page', category='military_training_camps') }}">
             <div class="folder__icon" style="background-image: url({{ url_for('static', filename='icons/folder.svg') }});">
                 <div class="folder__title">Военные сборы</div>
@@ -48,14 +49,14 @@
                 <div class="folder__title">Мероприятия</div>
             </div>
         </a>
-    </div>
-
-    <div class="folders__line">
-        <a class="folder__container" href="{{ url_for('documents_router.archive') }}">
+		<a class="folder__container" href="{{ url_for('documents_router.archive') }}">
             <div class="folder__icon" style="background-image: url({{ url_for('static', filename='icons/folder.svg') }});">
                 <div class="folder__title">Архив</div>
             </div>
         </a>
+    </div>
+
+    <div class="folders__line">
         <a class="folder__container" href="{{ url_for('documents_router.page', category='gallery') }}">
             <div class="folder__icon" style="background-image: url({{ url_for('static', filename='icons/folder.svg') }});">
                 <div class="folder__title">Галлерея</div>
@@ -72,5 +73,23 @@
             </div>
         </a>
     </div>
+</div>
+<div class="news__list__container">
+	<p class="news__container__title">Новости</p>
+	<a class="news__container">
+		<p class="news__title">Бла Бла Бла</p>
+	</a>
+	<a class="news__container">
+		<p class="news__title">Бла Бла Бла</p>
+	</a>
+	<a class="news__container">
+		<p class="news__title">Бла Бла Бла</p>
+	</a>
+	<a class="news__container">
+		<p class="news__title">Бла Бла Бла</p>
+	</a>
+	<a class="news__container">
+		<p class="news__title">Бла Бла Бла</p>
+	</a>
 </div>
 {% endblock %}

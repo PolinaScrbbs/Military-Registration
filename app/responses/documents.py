@@ -19,6 +19,7 @@ async def get_archived_documents() -> Tuple[int, Optional[List[dict]]]:
                 await response.json() if response.status == 200 else None
             )
 
+
 async def post_document(
     token: str, filename: str, category: str, file_bytes: bytes, original_filename: str
 ) -> Tuple[int, Optional[dict]]:

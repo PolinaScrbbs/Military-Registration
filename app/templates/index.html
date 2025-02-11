@@ -81,5 +81,8 @@
 			<p class="news__title">{{ news.title }}</p>
 		</a>
 	{% endfor %}
+	<div class="add-button-container">
+		<a href="{{ url_for('news_router.add_news') }}" class="add-button">Добавить</a>
+	</div>
 </div>
 {% endblock %}

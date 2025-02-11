@@ -99,5 +99,26 @@
     color: black;
 }
 
+.add-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+    background-color: black;
+}
+
+.add-button-container {
+    margin-bottom: 20px;
+    text-align: right;
+
+}
+
 
 

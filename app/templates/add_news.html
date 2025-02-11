@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add_document.css') }}">
+{% endblock styles %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Добавить новость</h2>
+
+    {% if error_message %}
+    <div class="error-message">
+        <p>{{ error_message }}</p>
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('news_router.add_news') }}">
+        <div class="form-group">
+            <label for="title">Заголовок</label>
+            <input type="text" id="title" name="title" value="{{ news_title or '' }}" placeholder="Введите заголовок" required>
+        </div>
+
+        <div class="form-group">
+            <label for="content">Содержание</label>
+            <textarea id="content" name="content" placeholder="Введите текст новости" required>{{ news_content or '' }}</textarea>
+        </div>
+
+        <button type="submit" class="submit-button">Добавить новость</button>
+    </form>
+</div>
+{% endblock %}

@@ -16,7 +16,7 @@ router = APIRouter(prefix="/news")
 
 @router.post("", response_model=NewsResponse, status_code=201)
 async def create_news(
-    new_news_data: NewNews = Depends(),
+    new_news_data: NewNews,
     session: AsyncSession = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):

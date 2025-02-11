@@ -1,16 +1,11 @@
 from datetime import datetime
-from pathlib import Path
-from typing import List, Tuple
+from typing import List
 
-from fastapi import UploadFile, HTTPException, status
-from sqlalchemy import select
+from fastapi import HTTPException, status
+from sqlalchemy import select, desc
 from sqlalchemy.orm import selectinload
-from sqlalchemy.sql import and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..user.validator import user_exists_by_username
-
-from config import config as conf
 from .models import News
 from .schemes import NewNews, NewsResponse, NewsUpdateRequest
 
@@ -46,7 +41,7 @@ async def get_news_list(
     result = await session.execute(
         select(News)
         .options(selectinload(News.creator))
-        .order_by(News.last_updated_at.desc(), News.created_at.desc())
+        .order_by(desc(News.last_updated_at).nullslast(), desc(News.created_at))
         .offset(skip)
         .limit(limit)
     )

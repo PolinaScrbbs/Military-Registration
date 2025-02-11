@@ -97,7 +97,7 @@ async def document_details(document_id):
     return await render_template("document_details.html", **context)
 
 
-@documents_router.route("/update/<int:document_id>", methods=["POST", "GET"])
+@documents_router.route("/update_documents/<int:document_id>", methods=["POST", "GET"])
 async def update_document(document_id: int):
     error_message = None
     rq_category = request.args.get("category")
@@ -149,7 +149,7 @@ async def update_document(document_id: int):
     return await render_template("update_document.html", **context)
 
 
-@documents_router.route("/delete/<int:document_id>")
+@documents_router.route("/delete_documents/<int:document_id>")
 async def delete_document(document_id):
     category = request.args.get("category")
 

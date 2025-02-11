@@ -23,3 +23,24 @@ async def get_news(news_id: int) -> Tuple[int, Optional[dict]]:
             return response.status, (
                 await response.json() if response.status == 200 else None
             )
+
+
+async def update_news(
+    token: str, news_id: int, data: dict
+) -> Tuple[int, Optional[dict]]:
+    async with aiohttp.ClientSession(API_URL) as session:
+        async with session.patch(
+            f"/news/{news_id}",
+            headers={"Authorization": f"Bearer {token}"},
+            json=data,
+        ) as response:
+            return response.status, await response.json()
+
+
+async def delete_news(token: str, news_id: int) -> Tuple[int, Optional[dict]]:
+    async with aiohttp.ClientSession(API_URL) as session:
+        async with session.delete(
+            f"/news/{news_id}",
+            headers={"Authorization": f"Bearer {token}"},
+        ) as response:
+            return response.status, await response.json()

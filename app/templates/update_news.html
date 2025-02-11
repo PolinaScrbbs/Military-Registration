@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/update_news.css') }}">
+{% endblock styles %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Обновить новость</h2>
+
+    {% if error_message %}
+    <div class="error-message">
+        <p>{{ error_message }}</p>
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('news_router.update_news', news_id=news_id) }}">
+        <div class="form-group">
+            <label for="title">Заголовок</label>
+            <input type="text" id="title" name="title" value="{{ news.title }}" placeholder="Введите новый заголовок" required>
+        </div>
+
+        <div class="form-group">
+            <label for="content">Содержание</label>
+            <textarea id="content" name="content" placeholder="Введите новый текст новости" required>{{ news.content }}</textarea>
+        </div>
+
+        <button type="submit" class="submit-button">Сохранить изменения</button>
+    </form>
+</div>
+{% endblock %}
+

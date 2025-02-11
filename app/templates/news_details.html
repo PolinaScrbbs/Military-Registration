@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/news_details.css') }}">
+{% endblock styles %}
+
+{% block content %}
+<p class="news-details-title"><strong>{{ news.title }}</strong></p>
+<div class="news__details__container">
+	<div class="buttons-container">
+		<a href="#" class="update-button">Обновить</a>
+		<a href="#" class="delete-button">Удалить</a>
+	</div>
+	<div class="news-details">
+		<p>{{ news.content }}</p>
+	</div>
+</div>
+
+
+{% endblock %}

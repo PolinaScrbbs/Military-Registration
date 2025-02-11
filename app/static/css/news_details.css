@@ -1,0 +1,76 @@
+@import 'base.css';
+
+.content{
+    justify-items: center;
+
+    height: 86vh;
+    padding: 2.5vh 15vw;
+}
+
+.content .buttons-container {
+    text-align: end;
+}
+
+.news-details-title {
+    text-align: center;
+    margin-top: 20px;
+    color: #444;
+    font-size: 28px;!important;
+}
+
+.news__details__container {
+    width: 60%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.news-details {
+    width: 100%;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.news-details p {
+    margin: 10px 0;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.update-button {
+    margin-right: 2%;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.update-button:hover {
+    background-color: #ffffff;
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.delete-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #e32a2a;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: #ffffff;
+    color: #e32a2a;
+    text-decoration: none;
+}

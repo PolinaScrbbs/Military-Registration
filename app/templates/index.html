@@ -76,20 +76,10 @@
 </div>
 <div class="news__list__container">
 	<p class="news__container__title">Новости</p>
-	<a class="news__container">
-		<p class="news__title">Бла Бла Бла</p>
-	</a>
-	<a class="news__container">
-		<p class="news__title">Бла Бла Бла</p>
-	</a>
-	<a class="news__container">
-		<p class="news__title">Бла Бла Бла</p>
-	</a>
-	<a class="news__container">
-		<p class="news__title">Бла Бла Бла</p>
-	</a>
-	<a class="news__container">
-		<p class="news__title">Бла Бла Бла</p>
-	</a>
+	{% for news in news_list %}
+		<a class="news__container" href="{{ url_for('news_router.news_details', news_id=news.id) }}">
+			<p class="news__title">{{ news.title }}</p>
+		</a>
+	{% endfor %}
 </div>
 {% endblock %}

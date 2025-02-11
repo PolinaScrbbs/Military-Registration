@@ -44,7 +44,11 @@ async def get_news_list(
     session: AsyncSession, skip: int, limit: int
 ) -> List[NewsResponse]:
     result = await session.execute(
-        select(News).options(selectinload(News.creator)).offset(skip).limit(limit)
+        select(News)
+        .options(selectinload(News.creator))
+        .order_by(News.last_updated_at.desc(), News.created_at.desc())
+        .offset(skip)
+        .limit(limit)
     )
 
     news_list = result.scalars().all()

@@ -1,5 +1,5 @@
-from typing import Tuple, List, Optional
 import aiohttp
+from typing import Tuple, List, Optional
 
 from ..config import API_URL
 
@@ -18,11 +18,6 @@ async def get_archived_documents() -> Tuple[int, Optional[List[dict]]]:
             return response.status, (
                 await response.json() if response.status == 200 else None
             )
-
-
-import aiohttp
-from typing import Tuple, Optional
-
 
 async def post_document(
     token: str, filename: str, category: str, file_bytes: bytes, original_filename: str

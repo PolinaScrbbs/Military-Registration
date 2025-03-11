@@ -18,13 +18,13 @@ async def get_news_list(
 
 
 async def post_news(token: str, title: str, content: str) -> Tuple[int, Optional[dict]]:
-    params = {"title": title, "content": content}
+    payload  = {"title": title, "content": content}
 
     async with aiohttp.ClientSession(API_URL) as session:
         async with session.post(
             "/news",
             headers={"Authorization": f"Bearer {token}"},
-            params=params,
+            json=payload,
         ) as response:
             return response.status, await response.json()
 
